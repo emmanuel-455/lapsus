@@ -19,12 +19,6 @@ export default function HomePage() {
 
   return (
     <div>
-      {!canInteract && (
-        <p className="text-center text-gray-500 mt-4">
-          You can read posts, but you must sign in to like or comment.
-        </p>
-      )}
-
       <div className="max-w-2xl mx-auto px-4 py-6">
         {posts.length === 0 ? (
           <p className="text-center text-gray-500">No posts yet.</p>
