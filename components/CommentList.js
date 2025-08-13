@@ -25,6 +25,37 @@ export default function CommentList({
     setVisibleCount((prev) => prev + 3);
   }
 
+  async function handleEdit(commentId) {
+    if (!editingContent.trim()) return;
+
+    try {
+      const res = await fetch(`/api/posts/${postId}/comments/${commentId}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: editingContent,
+          pseudonym: anonUser?.pseudonym,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to update comment");
+
+      const updatedComment = await res.json();
+
+      // Update state
+      setComments((prev) =>
+        prev.map((c) =>
+          c._id === commentId ? { ...c, content: updatedComment.content } : c
+        )
+      );
+
+      setEditingCommentId(null);
+      setEditingContent("");
+    } catch (err) {
+      console.error("Error updating comment:", err.message);
+    }
+  }
+
   return (
     <div className="mt-4">
       <h4 className="font-semibold mb-2">Comments</h4>
@@ -108,7 +139,7 @@ export default function CommentList({
                     </button>
                   </div>
 
-                  {/* Reply form toggles */}
+                  {/* Reply form */}
                   {activeReply === comment._id && (
                     <div className="mt-2 ml-4 animate-fadeIn">
                       <input
@@ -148,7 +179,6 @@ export default function CommentList({
             </div>
           ))}
 
-          {/* View More Button */}
           {visibleCount < comments.length && (
             <div className="mt-2">
               <button
