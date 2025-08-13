@@ -39,7 +39,10 @@ export default function CreatePost() {
           pseudonym: anonUser?.pseudonym || "Anonymous",
           userId: anonUser?.id,
           category,
-          tags: tags.split(",").map(tag => tag.trim()).filter(Boolean)
+          tags: tags
+            .split(",")
+            .map((tag) => tag.trim())
+            .filter(Boolean),
         }),
       });
 
@@ -64,7 +67,7 @@ export default function CreatePost() {
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-700">
-            What's on your mind?
+            What&apos;s on your mind?
           </label>
           <textarea
             rows="5"
